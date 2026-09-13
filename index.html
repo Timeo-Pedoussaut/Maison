@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home Hub</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,340;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #EDEBE4;
+    --surface: #F8F6F1;
+    --ink: #20261F;
+    --ink-soft: #565F52;
+    --copper: #A85C32;
+    --copper-deep: #8A4A28;
+    --sage: #6E8C6A;
+    --slate: #47586B;
+    --alert: #B23A2E;
+    --border: #DAD6CB;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.45;
+  }
+  .hub{
+    max-width:1080px;
+    margin:0 auto;
+    padding:2.5rem 1.5rem 4rem;
+  }
+  .hub-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    border-bottom:1px solid var(--border);
+    padding-bottom:1rem;
+    margin-bottom:2.5rem;
+  }
+  .hub-brand{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:1.15rem;
+    letter-spacing:0.01em;
+  }
+  .hub-clock{
+    font-variant-numeric: tabular-nums;
+    color:var(--ink-soft);
+    font-size:0.9rem;
+  }
+  .greeting h1{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:2.4rem;
+    margin:0 0 0.3rem;
+  }
+  .greeting-sub{
+    color:var(--ink-soft);
+    margin:0 0 2.5rem;
+    font-size:1rem;
+  }
+  .section-label{
+    font-size:0.8rem;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin:0 0 0.8rem;
+  }
+  section{margin-bottom:2.5rem;}
+
+  .pill-row, .family-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:0.6rem;
+  }
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:0.5rem;
+    padding:0.55rem 1rem;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:999px;
+    color:var(--ink);
+    text-decoration:none;
+    font-size:0.92rem;
+    font-weight:500;
+    transition:border-color 0.15s ease, transform 0.15s ease;
+  }
+  .pill:hover{border-color:var(--copper); transform:translateY(-1px);}
+  .pill.favorite{border-color:var(--copper-deep); background:#FBF3EC;}
+
+  .family-member{
+    display:flex;
+    align-items:center;
+    gap:0.6rem;
+    padding:0.5rem 0.9rem 0.5rem 0.5rem;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:999px;
+    text-decoration:none;
+    color:var(--ink);
+    font-weight:500;
+    font-size:0.92rem;
+  }
+  .avatar{
+    width:1.9rem;
+    height:1.9rem;
+    border-radius:50%;
+    background:var(--slate);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:0.78rem;
+    font-weight:600;
+    flex-shrink:0;
+  }
+
+  .category-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(230px, 1fr));
+    gap:1px;
+    background:var(--border);
+    border:1px solid var(--border);
+  }
+  details.category{
+    background:var(--surface);
+    padding:1.1rem 1.2rem;
+  }
+  details.category > summary{
+    cursor:pointer;
+    list-style:none;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-weight:600;
+    font-size:0.98rem;
+  }
+  details.category > summary::-webkit-details-marker{display:none;}
+  details.category > summary .chevron{
+    color:var(--ink-soft);
+    transition:transform 0.15s ease;
+    font-size:0.8rem;
+  }
+  details.category[open] > summary .chevron{transform:rotate(90deg);}
+  .category-links{
+    margin-top:0.9rem;
+    display:flex;
+    flex-direction:column;
+    gap:0.5rem;
+  }
+  .category-links a, .category-links span.note{
+    color:var(--ink-soft);
+    text-decoration:none;
+    font-size:0.9rem;
+    padding:0.15rem 0;
+    border-bottom:1px solid transparent;
+  }
+  .category-links a:hover{color:var(--copper); border-color:var(--copper);}
+  .category-links span.note{font-style:italic; color:#8A8578;}
+
+  .status-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:1px;
+    background:var(--border);
+    border:1px solid var(--border);
+  }
+  .status-card{
+    background:var(--surface);
+    padding:1rem 1.2rem;
+  }
+  .status-card .label{
+    font-size:0.78rem;
+    color:var(--ink-soft);
+    font-weight:600;
+    margin-bottom:0.35rem;
+  }
+  .status-card .value{
+    font-size:1.05rem;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:0.45rem;
+  }
+  .dot{
+    width:0.5rem;
+    height:0.5rem;
+    border-radius:50%;
+    display:inline-block;
+  }
+  .dot.ok{background:var(--sage);}
+  .dot.warn{background:var(--alert);}
+  .dot.idle{background:var(--ink-soft);}
+  .status-card .detail{
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    margin-top:0.3rem;
+  }
+
+  footer.hub-footer{
+    margin-top:3rem;
+    padding-top:1.2rem;
+    border-top:1px solid var(--border);
+    font-size:0.8rem;
+    color:var(--ink-soft);
+  }
+
+  @media (max-width:480px){
+    .greeting h1{font-size:1.9rem;}
+    .hub{padding:1.6rem 1rem 3rem;}
+  }
+</style>
+</head>
+<body>
+<div class="hub">
+
+  <header class="hub-header">
+    <div class="hub-brand">Home Hub</div>
+    <div class="hub-clock" id="clock"></div>
+  </header>
+
+  <section class="greeting">
+    <h1 id="greeting-text">Bonjour</h1>
+    <p class="greeting-sub">Tout ce dont la famille a besoin, au même endroit.</p>
+  </section>
+
+  <section aria-label="Favoris">
+    <p class="section-label">Favoris</p>
+    <div class="pill-row" id="favorites-row"></div>
+  </section>
+
+  <section aria-label="Famille">
+    <p class="section-label">Famille</p>
+    <div class="family-row" id="family-row"></div>
+  </section>
+
+  <section aria-label="Services">
+    <p class="section-label">Services</p>
+    <div class="category-grid" id="category-grid"></div>
+  </section>
+
+  <section aria-label="Système">
+    <p class="section-label">Système</p>
+    <div class="status-grid" id="status-grid"></div>
+  </section>
+
+  <footer class="hub-footer">
+    Home Hub — modifie librement les données dans la section <code>DATA</code> du fichier <code>index.html</code>.
+  </footer>
+
+</div>
+
+<script>
+/* =========================================================
+   DATA — modifie cette section pour personnaliser ton HUB
+   ========================================================= */
+
+const MEMBERS = [
+  { name: "Timeo" },
+  { name: "Papa" },
+  { name: "Maman" },
+  { name: "Maïlyne" }
+];
+
+// ids des liens marqués comme favoris (voir plus bas)
+const FAVORITE_IDS = ["bnp", "spotify", "instagram", "netflix"];
+
+const CATEGORIES = [
+  {
+    icon: "💰", label: "Banque",
+    links: [
+      { id: "bnp", name: "BNP Paribas", url: "https://mabanque.bnpparibas/" },
+      { id: "lbp", name: "La Banque Postale", url: "https://www.labanquepostale.fr/" }
+    ]
+  },
+  {
+    icon: "🛒", label: "Courses",
+    links: [
+      { id: "leclerc", name: "E.Leclerc", url: "https://www.e.leclerc/" },
+      { id: "carrefour", name: "Carrefour", url: "https://www.carrefour.fr/" },
+      { id: "lidl", name: "Lidl", url: "https://www.lidl.fr/" }
+    ]
+  },
+  {
+    icon: "🍔", label: "Restauration",
+    links: [
+      { id: "mcdo", name: "McDonald's", url: "https://www.mcdonalds.com/fr/fr-fr.html" },
+      { id: "bk", name: "Burger King", url: "https://www.burgerking.fr/" }
+    ]
+  },
+  {
+    icon: "🎬", label: "Divertissement",
+    links: [
+      { id: "netflix", name: "Netflix", url: "https://www.netflix.com/" },
+      { id: "youtube", name: "YouTube", url: "https://www.youtube.com/" },
+      { id: "spotify", name: "Spotify", url: "https://www.spotify.com/" }
+    ]
+  },
+  {
+    icon: "📱", label: "Réseaux sociaux",
+    links: [
+      { id: "instagram", name: "Instagram", url: "https://www.instagram.com/" },
+      { id: "linkedin", name: "LinkedIn", url: "https://www.linkedin.com/" }
+    ]
+  },
+  {
+    icon: "💳", label: "Vie quotidienne",
+    links: [
+      { id: "swile", name: "Swile", url: "https://www.swile.co/" }
+    ]
+  },
+  {
+    icon: "📄", label: "Administratif",
+    links: [
+      { id: "caf", name: "CAF", url: "https://www.caf.fr/" },
+      { id: "identite", name: "France Identité", url: "https://france-identite.gouv.fr/" },
+      { id: "impots", name: "impots.gouv", url: "https://www.impots.gouv.fr/" },
+      { id: "permis", name: "Mes Points Permis", url: "https://www.securite-routiere.gouv.fr/", note: "vérifie l'URL exacte de ton espace" },
+      { id: "fconnect", name: "FranceConnect", url: "https://franceconnect.gouv.fr/" }
+    ]
+  },
+  {
+    icon: "📹", label: "Caméras",
+    links: [
+      { id: "esee", name: "EseeCloud", url: "#", note: "application mobile — pas de portail web" },
+      { id: "lsc", name: "LSCSmartConnect", url: "#", note: "application mobile — pas de portail web" }
+    ]
+  }
+];
+
+// Données système : à remplacer par de vrais appels (API Freebox, base de sauvegardes...)
+// Voir le GUIDE.md fourni avec ce projet pour brancher des données réelles.
+const STATUS = [
+  { label: "Réseau", status: "ok", value: "Connecté", detail: "340 Mb/s ↓ · 52 Mb/s ↑ (donnée fictive)" },
+  { label: "Sauvegardes", status: "warn", value: "2 / 3 à jour", detail: "PC de Papa : dernière sauvegarde il y a 9 jours" },
+  { label: "Électricité", status: "idle", value: "Non branché", detail: "à connecter à un capteur/API" },
+  { label: "Alertes", status: "ok", value: "Aucune", detail: "aucun appareil inconnu détecté" }
+];
+
+/* =========================================================
+   RENDU — pas besoin de modifier ce qui suit
+   ========================================================= */
+
+function initials(name){
+  return name.trim().charAt(0).toUpperCase();
+}
+
+function renderGreeting(){
+  const params = new URLSearchParams(location.search);
+  const member = params.get("membre");
+  const hour = new Date().getHours();
+  const salutation = hour < 18 ? "Bonjour" : "Bonsoir";
+  document.getElementById("greeting-text").textContent =
+    member ? `${salutation}, ${member}` : `${salutation}`;
+}
+
+function renderClock(){
+  const el = document.getElementById("clock");
+  function tick(){
+    const now = new Date();
+    el.textContent = now.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })
+      + " · " + now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
+  }
+  tick();
+  setInterval(tick, 30000);
+}
+
+function renderFavorites(){
+  const row = document.getElementById("favorites-row");
+  const allLinks = CATEGORIES.flatMap(c => c.links);
+  FAVORITE_IDS.forEach(id => {
+    const link = allLinks.find(l => l.id === id);
+    if(!link) return;
+    const a = document.createElement("a");
+    a.href = link.url;
+    a.className = "pill favorite";
+    a.textContent = link.name;
+    a.target = "_blank";
+    a.rel = "noopener";
+    row.appendChild(a);
+  });
+}
+
+function renderFamily(){
+  const row = document.getElementById("family-row");
+  MEMBERS.forEach(m => {
+    const a = document.createElement("a");
+    a.href = "?membre=" + encodeURIComponent(m.name);
+    a.className = "family-member";
+    a.innerHTML = `<span class="avatar">${initials(m.name)}</span>${m.name}`;
+    row.appendChild(a);
+  });
+}
+
+function renderCategories(){
+  const grid = document.getElementById("category-grid");
+  CATEGORIES.forEach(cat => {
+    const details = document.createElement("details");
+    details.className = "category";
+    const summary = document.createElement("summary");
+    summary.innerHTML = `<span>${cat.icon} ${cat.label}</span><span class="chevron">›</span>`;
+    details.appendChild(summary);
+
+    const linksWrap = document.createElement("div");
+    linksWrap.className = "category-links";
+    cat.links.forEach(link => {
+      if(link.note && link.url === "#"){
+        const span = document.createElement("span");
+        span.className = "note";
+        span.textContent = `${link.name} — ${link.note}`;
+        linksWrap.appendChild(span);
+      } else {
+        const a = document.createElement("a");
+        a.href = link.url;
+        a.textContent = link.name + (link.note ? ` (${link.note})` : "");
+        a.target = "_blank";
+        a.rel = "noopener";
+        linksWrap.appendChild(a);
+      }
+    });
+    details.appendChild(linksWrap);
+    grid.appendChild(details);
+  });
+}
+
+function renderStatus(){
+  const grid = document.getElementById("status-grid");
+  STATUS.forEach(s => {
+    const card = document.createElement("div");
+    card.className = "status-card";
+    card.innerHTML = `
+      <div class="label">${s.label}</div>
+      <div class="value"><span class="dot ${s.status}"></span>${s.value}</div>
+      <div class="detail">${s.detail}</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+renderGreeting();
+renderClock();
+renderFavorites();
+renderFamily();
+renderCategories();
+renderStatus();
+</script>
+</body>
+</html>
